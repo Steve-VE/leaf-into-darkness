@@ -1,5 +1,5 @@
 let body;
-let socket = io.connect('http://localhost:8000');
+let socket = io.connect('http://localhost:8001');
 let gameStarted = false;
 let playerID = Math.round(Math.random() * 4096);
 let currentPlayer;
