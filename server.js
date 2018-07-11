@@ -5,7 +5,7 @@ let app = express();
 let socket = require('socket.io');
 
 // Config
-const config = require('./config');
+const config = require('./_config');
 nunjucks.configure('views', {
     autoescape: true,
     express: app
