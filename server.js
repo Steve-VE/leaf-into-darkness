@@ -32,10 +32,10 @@ let server = app.listen(config.port, ()=>{
 // Sockets
 let io = socket(server);
 io.on('connection', (socket)=>{
-    // console.log("-- New connection at [" + socket.id + "] id.");
+    console.log("-- New connection at [" + socket.id + "] id.");
 
     socket.on('player-move', (data)=>{
-        console.log("-- Player +" + data.id + "moved.");
+        // console.log("-- Player +" + data.id + "moved.");
         socket.broadcast.emit('player-move', data);
     });
 });

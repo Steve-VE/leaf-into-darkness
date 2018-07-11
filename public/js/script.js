@@ -1,10 +1,14 @@
+const getSocketUrl = ()=>{
+    return window.location.href;
+};
+
 let body;
-// let socket = io.connect('http://localhost:8001');
-let socket = io.connect('https://leaf.steve-ve.eu');
+let socket = io.connect(getSocketUrl());
 let gameStarted = false;
 let playerID = Math.round(Math.random() * 4096);
 let currentPlayer;
 let players = [];
+
 
 window.onload = ()=>{
     console.log("-- Script loaded");
