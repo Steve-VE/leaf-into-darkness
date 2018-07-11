@@ -51,7 +51,7 @@ function mouseMoved(){
 
 // SOCKETS
 socket.on('player-move', (data)=>{
-    // console.log(data);
+    console.log(data);
     if(data.id === playerID){
         currentPlayer.x = data.x;
         currentPlayer.y = data.y;

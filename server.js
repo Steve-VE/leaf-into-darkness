@@ -35,8 +35,7 @@ io.on('connection', (socket)=>{
     console.log("-- New connection at [" + socket.id + "] id.");
 
     socket.on('player-move', (data)=>{
-        // console.log("-- Player moved.");
-        // console.log(data);
+        console.log("-- Player +" + data.id + "moved.");
         socket.broadcast.emit('player-move', data);
     });
 });
