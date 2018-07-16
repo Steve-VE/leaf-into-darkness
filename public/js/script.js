@@ -2,34 +2,51 @@ const getSocketUrl = ()=>{
     return window.location.href;
 };
 
+const KEY_LEFT = 37;
+const KEY_UP = 38;
+const KEY_RIGHT = 39;
+const KEY_DOWN = 40;
+
+
 let body;
 let socket = io.connect(getSocketUrl());
 let gameStarted = false;
 let playerID = Math.round(Math.random() * 4096);
 let currentPlayer;
 let players = [];
+let form;
 
 
 window.onload = ()=>{
     console.log("-- Script loaded");
     body = document.querySelector('body');  
+    createCanvas( body.clientWidth, body.clientHeight );
+
+    form = document.querySelector('form');
+    form.querySelector('input[type=submit]').addEventListener('click', (e)=>{
+        e.preventDefault();
+        let pseudo = form.querySelector('input[type=text]').value;
+        
+        if(pseudo !== undefined && pseudo !== null){
+            pseudo = pseudo.trim();
+
+            if(pseudo !== ''){
+                startGame(pseudo);
+            }
+        }
+    });
 };
 
 
 // GAME LOGIC
 function setup(){
     frameRate(60);
+    
 }
 
 function draw(){
-    if(!gameStarted && body !== undefined){
-        gameStarted = true;
-        createCanvas( body.clientWidth, body.clientHeight );
-        currentPlayer = new Player(playerID, mouseX, mouseY);
-        players.push(currentPlayer);
-    }
-    else{
-        background(0);
+    if(gameStarted){
+        background(128);
 
         // console.log(players);
         for(let cPlayer of players){
@@ -41,41 +58,51 @@ function draw(){
     }
 }
 
-function mouseMoved(){
-    if(gameStarted){
-        currentPlayer.x = mouseX;
-        currentPlayer.y = mouseY;
+const startGame = (pseudo = "Unkown Player")=>{
+    socket.emit('player-join', pseudo);
+};
 
-        socket.emit('player-move', {
-            id: currentPlayer.id,
-            x: currentPlayer.x,
-            y: currentPlayer.y
-        });
+function mouseMoved(){
+    if(gameStarted && currentPlayer !== undefined){
+        // currentPlayer.x = mouseX;
+        // currentPlayer.y = mouseY;
+
+        // socket.emit('player-move', {
+        //     id: currentPlayer.id,
+        //     x: currentPlayer.x,
+        //     y: currentPlayer.y
+        // });
     }
 }
 
-// SOCKETS
-socket.on('player-move', (data)=>{
-    // console.log(data);
-    if(data.id === playerID){
-        currentPlayer.x = data.x;
-        currentPlayer.y = data.y;
-    }
-    else{
-        let playerAlreadyExist = false;
+function mouseDragged(){
+    mouseMoved();
+}
 
-        for(let i = players.length - 1; i >= 0; i--){
-            let cPlayer = players[i];
-            if(cPlayer.id === data.id){
-                playerAlreadyExist = true;
-                cPlayer.x = data.x;
-                cPlayer.y = data.y;
-                break;
-            }
-        }
 
-        if(!playerAlreadyExist){
-            players.push(new Player(data.id, data.x, data.y));
-        }
+window.addEventListener('keydown', (e)=>{
+    if(gameStarted && currentPlayer !== undefined){
+        const key = e.key;
+        const keyCode = e.keyCode;
+        // console.log("-- key : " + key + " - keyCode : " + keyCode);
+
+        switch(keyCode){
+            case KEY_UP:
+            case 90:
+            currentPlayer.move(0, -5);
+            break;
+            case KEY_DOWN:
+            case 83:
+            currentPlayer.move(0, 5);
+            break;
+            case KEY_LEFT:
+            case 81:
+            currentPlayer.move(-5, 0);
+            break;
+            case KEY_RIGHT:
+            case 68:
+            currentPlayer.move(5, 0);
+            break;
+        }       
     }
 });

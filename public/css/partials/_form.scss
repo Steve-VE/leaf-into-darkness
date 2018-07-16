@@ -1,0 +1,36 @@
+form{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    
+    background-color: transparent;
+
+    transform: translate(-50%, -50%);
+    
+    input{
+        padding: $space;
+        border-radius: $space;
+        
+        &[type=text]{
+            padding: $space $space*2;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: $color-fluo 1px solid;
+            color: $color-fluo;
+        }
+        &[type=submit]{
+            background: $color-fluo;
+            color: black;
+            border: $color-fluo 1px solid;
+            text-transform: uppercase;
+            font-weight: bold;
+            
+            cursor: pointer;
+            
+            &:hover{
+                background-color: rgba($color-fluo, 0.3);
+                border: $color-fluo 1px solid;
+                color: $color-fluo;
+            }
+        }
+    }
+}
